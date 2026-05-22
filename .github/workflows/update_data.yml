@@ -1,0 +1,26 @@
+name: Update data snapshots
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate GeoJSON structure
+        run: |
+          for file in data/*.geojson; do
+            jq -e '.type == "FeatureCollection"' "$file" >/dev/null
+          done
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/*.geojson
+          git diff --cached --quiet || git commit -m "chore: update data snapshots"
+          git push

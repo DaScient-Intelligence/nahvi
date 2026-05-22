@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Sample flood plain", "hazard": "flood" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-87.651, 41.875],
+            [-87.651, 41.893],
+            [-87.632, 41.893],
+            [-87.632, 41.875],
+            [-87.651, 41.875]
+          ]
+        ]
+      }
+    }
+  ]
+}

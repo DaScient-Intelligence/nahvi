@@ -1,0 +1,30 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Downtown Grocery", "category": "grocery" },
+      "geometry": { "type": "Point", "coordinates": [-87.6323, 41.8815] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Grant Park", "category": "park" },
+      "geometry": { "type": "Point", "coordinates": [-87.6196, 41.8763] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Blue Line Station", "category": "transit" },
+      "geometry": { "type": "Point", "coordinates": [-87.6291, 41.8788] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Community Clinic", "category": "health" },
+      "geometry": { "type": "Point", "coordinates": [-87.6437, 41.8894] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Public Library", "category": "education" },
+      "geometry": { "type": "Point", "coordinates": [-87.6279, 41.8760] }
+    }
+  ]
+}

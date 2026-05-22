@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nahvi | Community Resilience Mapping</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Nahvi</h1>
+      <p>Accessibility, environmental health, and disaster resilience mapping with BYO API keys.</p>
+    </header>
+
+    <main>
+      <aside id="controls">
+        <section>
+          <h2>BYO Keys (stored in your browser)</h2>
+          <form id="keys-form">
+            <label>OpenRouteService key <input id="ors-key" type="password" autocomplete="off" /></label>
+            <label>OpenAI key (optional) <input id="openai-key" type="password" autocomplete="off" /></label>
+            <label>Anthropic key (optional) <input id="anthropic-key" type="password" autocomplete="off" /></label>
+            <button type="submit">Save keys locally</button>
+          </form>
+        </section>
+
+        <section>
+          <h2>Route planning</h2>
+          <form id="route-form">
+            <label>Start lat,lng <input id="route-start" value="41.8781,-87.6298" required /></label>
+            <label>End lat,lng <input id="route-end" value="41.8902,-87.6356" required /></label>
+            <label>Profile
+              <select id="route-profile">
+                <option value="foot-walking">Walking</option>
+                <option value="cycling-regular">Cycling</option>
+                <option value="wheelchair">Wheelchair</option>
+              </select>
+            </label>
+            <label class="inline"><input id="avoid-hazards" type="checkbox" /> Avoid hazard zones</label>
+            <button type="submit">Find safe route</button>
+            <button id="optimize-demo" type="button">Optimize volunteer stops (demo)</button>
+          </form>
+        </section>
+
+        <section>
+          <h2>Isochrone + 15-minute city</h2>
+          <form id="iso-form">
+            <label>Center lat,lng <input id="iso-center" value="41.8781,-87.6298" required /></label>
+            <label>Minutes <input id="iso-minutes" type="number" min="1" max="60" value="15" required /></label>
+            <label>Profile
+              <select id="iso-profile">
+                <option value="foot-walking">Walking</option>
+                <option value="cycling-regular">Cycling</option>
+                <option value="wheelchair">Wheelchair</option>
+              </select>
+            </label>
+            <button type="submit">Calculate isochrone</button>
+          </form>
+          <p id="amenity-summary"></p>
+        </section>
+
+        <section>
+          <h2>Overlay layers</h2>
+          <div class="buttons">
+            <button id="toggle-amenities" type="button">Toggle amenities</button>
+            <button id="toggle-hazards" type="button">Toggle hazards</button>
+            <button id="toggle-crime" type="button">Toggle safety heatmap</button>
+            <button id="load-air" type="button">Load air quality</button>
+          </div>
+          <p id="data-source"></p>
+        </section>
+
+        <section>
+          <h2>Agentic helper</h2>
+          <form id="assistant-form">
+            <textarea id="assistant-prompt" rows="4" placeholder="Try: safest wheelchair route avoiding flood zones"></textarea>
+            <button type="submit">Run assistant action</button>
+          </form>
+        </section>
+
+        <p class="disclaimer">
+          Nahvi is a planning aid. For active emergencies, use official local alerts and guidance.
+        </p>
+        <button id="locate-me" type="button">Use my location</button>
+      </aside>
+
+      <section id="map" aria-label="Map"></section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+    <script type="module" src="./js/ui.js"></script>
+  </body>
+</html>
