@@ -3,13 +3,14 @@ import { getDataSourceLink, loadGeoJSON, query_overlay_data } from './dataLoader
 import { drawRoute, find_safe_route, optimizeStops } from './routes.js';
 import { calculate_isochrone, countAmenitiesInIsochrone, drawIsochrone } from './isochrones.js';
 import { showSafetyHeatmap, showAirQuality } from './heatmaps.js';
+import { ANTHROPIC_KEY_STORAGE_NAME, OPENAI_KEY_STORAGE_NAME, ORS_KEY_STORAGE_NAME } from './keys.js';
 
 const state = {
   amenities: null,
   hazards: null,
   crime: null
 };
-// Default downtown Chicago area used for assistant amenity demos when no map-view parsing is requested.
+// Downtown Chicago default bounding box: [west, south, east, north].
 const ASSISTANT_FILTER_BBOX = [-87.75, 41.82, -87.58, 41.93];
 
 function setStatus(message, isError = false) {
@@ -39,9 +40,9 @@ function saveKeys(event) {
   const openai = document.querySelector('#openai-key').value.trim();
   const anthropic = document.querySelector('#anthropic-key').value.trim();
 
-  if (ors) localStorage.setItem('nahvi_ors_key', ors);
-  if (openai) localStorage.setItem('nahvi_openai_key', openai);
-  if (anthropic) localStorage.setItem('nahvi_anthropic_key', anthropic);
+  if (ors) localStorage.setItem(ORS_KEY_STORAGE_NAME, ors);
+  if (openai) localStorage.setItem(OPENAI_KEY_STORAGE_NAME, openai);
+  if (anthropic) localStorage.setItem(ANTHROPIC_KEY_STORAGE_NAME, anthropic);
 
   setStatus('Keys saved in your browser localStorage.');
 }
