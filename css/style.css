@@ -94,6 +94,12 @@ button {
   color: #64748b;
 }
 
+#status-message {
+  font-size: 0.85rem;
+  color: #0f766e;
+  min-height: 1.2rem;
+}
+
 @media (max-width: 960px) {
   main {
     grid-template-columns: 1fr;

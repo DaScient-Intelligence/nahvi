@@ -74,11 +74,13 @@
         <section>
           <h2>Agentic helper</h2>
           <form id="assistant-form">
+            <label for="assistant-prompt">Assistant prompt</label>
             <textarea id="assistant-prompt" rows="4" placeholder="Try: safest wheelchair route avoiding flood zones"></textarea>
             <button type="submit">Run assistant action</button>
           </form>
         </section>
 
+        <p id="status-message" role="status" aria-live="polite"></p>
         <p class="disclaimer">
           Nahvi is a planning aid. For active emergencies, use official local alerts and guidance.
         </p>

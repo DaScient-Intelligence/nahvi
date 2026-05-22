@@ -9,7 +9,15 @@ const state = {
   hazards: null,
   crime: null
 };
+// Default downtown Chicago area used for assistant amenity demos when no map-view parsing is requested.
 const ASSISTANT_FILTER_BBOX = [-87.75, 41.82, -87.58, 41.93];
+
+function setStatus(message, isError = false) {
+  const el = document.querySelector('#status-message');
+  if (!el) return;
+  el.textContent = message;
+  el.style.color = isError ? '#b91c1c' : '#0f766e';
+}
 
 function setDataSource(layerType) {
   const el = document.querySelector('#data-source');
@@ -35,7 +43,7 @@ function saveKeys(event) {
   if (openai) localStorage.setItem('nahvi_openai_key', openai);
   if (anthropic) localStorage.setItem('nahvi_anthropic_key', anthropic);
 
-  alert('Keys saved in your browser localStorage.');
+  setStatus('Keys saved in your browser localStorage.');
 }
 
 async function handleRoute(event) {
@@ -49,8 +57,9 @@ async function handleRoute(event) {
     const avoidGeoJSON = avoidHazards ? state.hazards : undefined;
     const routeGeoJSON = await find_safe_route(start, end, profile, { avoidGeoJSON });
     drawRoute(routeGeoJSON);
+    setStatus('Route calculated and rendered.');
   } catch (error) {
-    alert(error.message);
+    setStatus(error.message, true);
   }
 }
 
@@ -68,8 +77,9 @@ async function handleIsochrone(event) {
       `Reachable amenities: ${summary.reachable}/${summary.total} (${Object.entries(summary.byType)
         .map(([kind, count]) => `${kind}: ${count}`)
         .join(', ') || 'none'})`;
+    setStatus('Isochrone calculated and amenity counts updated.');
   } catch (error) {
-    alert(error.message);
+    setStatus(error.message, true);
   }
 }
 
@@ -79,38 +89,39 @@ async function runAssistantAction(event) {
 
   if (prompt.includes('hazard') || prompt.includes('flood')) {
     render_geojson_on_map(state.hazards, { color: '#ef4444', weight: 1, fillOpacity: 0.2 }, 'hazards');
-    alert('Assistant action: displayed hazard overlay.');
+    setStatus('Assistant action: displayed hazard overlay.');
     return;
   }
 
   if (prompt.includes('safety') || prompt.includes('crime')) {
     showSafetyHeatmap(state.crime);
-    alert('Assistant action: displayed safety heatmap.');
+    setStatus('Assistant action: displayed safety heatmap.');
     return;
   }
 
   if (prompt.includes('amenity') || prompt.includes('15 minute')) {
     const filtered = await query_overlay_data(ASSISTANT_FILTER_BBOX, 'amenities');
     render_geojson_on_map(filtered, { color: '#0ea5e9' }, 'amenities');
-    alert('Assistant action: displayed amenity overlay for active area.');
+    setStatus('Assistant action: displayed amenity overlay for active area.');
     return;
   }
 
-  alert('Prompt not recognized. Try phrases like "show hazards", "show safety heatmap", or "show amenities".');
+  setStatus('Prompt not recognized. Try keywords: hazard/flood, safety/crime, amenity/15 minute.', true);
 }
 
 function locateUser() {
   if (!navigator.geolocation) {
-    alert('Geolocation is not available in this browser.');
+    setStatus('Geolocation is not available in this browser.', true);
     return;
   }
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
       centerMapOn(position.coords.latitude, position.coords.longitude);
+      setStatus('Map centered on your current location.');
     },
     (error) => {
-      alert(`Unable to get location: ${error.message}`);
+      setStatus(`Unable to get location: ${error.message}`, true);
     },
     { enableHighAccuracy: true, timeout: 10000 }
   );
@@ -127,9 +138,9 @@ async function runOptimizationDemo() {
     const result = await optimizeStops(start, stops);
     const jobs = result.routes?.[0]?.steps?.filter((step) => step.type === 'job') || [];
     const sequence = jobs.map((step) => step.id).join(' → ') || 'No optimized sequence returned';
-    alert(`Volunteer route optimization: ${sequence}`);
+    setStatus(`Volunteer route optimization: ${sequence}`);
   } catch (error) {
-    alert(error.message);
+    setStatus(error.message, true);
   }
 }
 
@@ -166,8 +177,9 @@ async function bootstrap() {
     try {
       await showAirQuality();
       setDataSource('');
+      setStatus('Air quality markers loaded.');
     } catch (error) {
-      alert(error.message);
+      setStatus(error.message, true);
     }
   });
 
@@ -179,5 +191,6 @@ bootstrap().catch((error) => {
   if (summary) {
     summary.textContent = `Startup error: ${error.message}`;
   }
+  setStatus(`Startup error: ${error.message}`, true);
   console.error('Failed to start Nahvi', error);
 });
