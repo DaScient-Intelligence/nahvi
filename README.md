@@ -75,7 +75,7 @@ No backend persistence or tracking is implemented.
 Because the app uses ES modules and fetches local GeoJSON files, serve it over HTTP:
 
 ```bash
-cd /home/runner/work/nahvi/nahvi
+cd path/to/nahvi
 python3 -m http.server 8080
 ```
 

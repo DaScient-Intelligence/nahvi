@@ -1,5 +1,8 @@
 import { getMap, setLayer, removeLayer } from './map.js';
 
+const PM25_MODERATE_THRESHOLD = 12;
+const PM25_UNHEALTHY_THRESHOLD = 35;
+
 export function showSafetyHeatmap(crimeGeoJSON) {
   removeLayer('crimeHeatmap');
   const points = crimeGeoJSON.features
@@ -26,7 +29,7 @@ export async function showAirQuality(city = 'chicago') {
     .filter((result) => result.coordinates && result.measurements?.length)
     .map((result) => {
       const pm = result.measurements.find((m) => m.parameter === 'pm25') || result.measurements[0];
-      const color = pm.value > 35 ? '#dc2626' : pm.value > 12 ? '#f59e0b' : '#16a34a';
+      const color = pm.value > PM25_UNHEALTHY_THRESHOLD ? '#dc2626' : pm.value > PM25_MODERATE_THRESHOLD ? '#f59e0b' : '#16a34a';
       return L.circleMarker([result.coordinates.latitude, result.coordinates.longitude], {
         radius: 5,
         color,

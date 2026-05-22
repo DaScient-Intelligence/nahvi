@@ -1,12 +1,5 @@
 import { getMap, removeLayer, setLayer } from './map.js';
-
-function getORSKey() {
-  const key = localStorage.getItem('nahvi_ors_key');
-  if (!key) {
-    throw new Error('Missing ORS key. Save your key first.');
-  }
-  return key;
-}
+import { getORSKey } from './keys.js';
 
 export async function calculate_isochrone(location, time, profile) {
   const key = getORSKey();

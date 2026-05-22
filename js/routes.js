@@ -1,15 +1,8 @@
 import { getMap, removeLayer, setLayer } from './map.js';
-
-function getRequiredKey() {
-  const key = localStorage.getItem('nahvi_ors_key');
-  if (!key) {
-    throw new Error('Missing ORS key. Save your key first.');
-  }
-  return key;
-}
+import { getORSKey } from './keys.js';
 
 export async function find_safe_route(start, end, profile, options = {}) {
-  const key = getRequiredKey();
+  const key = getORSKey();
   const body = {
     coordinates: [start, end],
     instructions: true
@@ -46,7 +39,7 @@ export function drawRoute(routeGeoJSON) {
 }
 
 export async function optimizeStops(start, stops) {
-  const key = getRequiredKey();
+  const key = getORSKey();
   const jobs = stops.map((coord, index) => ({ id: index + 1, location: coord }));
   const vehicles = [{ id: 1, profile: 'driving-car', start, end: start }];
   const response = await fetch('https://api.openrouteservice.org/optimization', {

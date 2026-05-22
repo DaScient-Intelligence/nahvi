@@ -9,6 +9,7 @@ const state = {
   hazards: null,
   crime: null
 };
+const ASSISTANT_FILTER_BBOX = [-87.75, 41.82, -87.58, 41.93];
 
 function setDataSource(layerType) {
   const el = document.querySelector('#data-source');
@@ -89,13 +90,13 @@ async function runAssistantAction(event) {
   }
 
   if (prompt.includes('amenity') || prompt.includes('15 minute')) {
-    const filtered = await query_overlay_data([-87.75, 41.82, -87.58, 41.93], 'amenities');
+    const filtered = await query_overlay_data(ASSISTANT_FILTER_BBOX, 'amenities');
     render_geojson_on_map(filtered, { color: '#0ea5e9' }, 'amenities');
     alert('Assistant action: displayed amenity overlay for active area.');
     return;
   }
 
-  alert('Try prompts mentioning hazards, safety, or amenities.');
+  alert('Prompt not recognized. Try phrases like "show hazards", "show safety heatmap", or "show amenities".');
 }
 
 function locateUser() {
