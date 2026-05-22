@@ -25,22 +25,27 @@ export function showSafetyHeatmap(crimeGeoJSON) {
 
 export async function showAirQuality(city = 'chicago') {
   removeLayer('airQuality');
-  const response = await fetch(`https://api.openaq.org/v2/latest?city=${encodeURIComponent(city)}&limit=100`);
+  // OpenAQ v3: parameter_id=2 is pm25; each result is a single measurement record.
+  const response = await fetch(
+    `https://api.openaq.org/v3/measurements?parameter_id=2&city=${encodeURIComponent(city)}&limit=100`
+  );
   if (!response.ok) {
     throw new Error(`OpenAQ request failed (${response.status})`);
   }
 
   const data = await response.json();
   const markers = (data.results || [])
-    .filter((result) => result.coordinates && result.measurements?.length)
+    .filter((result) => result.location?.coordinates && result.value != null)
     .map((result) => {
-      const pm = result.measurements.find((m) => m.parameter === 'pm25') || result.measurements[0];
-      const color = getAirQualityColor(pm.value);
-      return L.circleMarker([result.coordinates.latitude, result.coordinates.longitude], {
+      const { latitude, longitude } = result.location.coordinates;
+      const color = getAirQualityColor(result.value);
+      return L.circleMarker([latitude, longitude], {
         radius: 5,
         color,
         fillOpacity: 0.8
-      }).bindPopup(`${result.location}<br>${pm.parameter.toUpperCase()}: ${pm.value} ${pm.unit}`);
+      }).bindPopup(
+        `${result.location.name}<br>${result.parameter.name.toUpperCase()}: ${result.value} ${result.parameter.units}`
+      );
     });
 
   const layer = L.layerGroup(markers).addTo(getMap());

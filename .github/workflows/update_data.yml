@@ -24,4 +24,4 @@ jobs:
           git add data/*.geojson
           # This workflow currently validates tracked data files; it only commits if files were updated before run.
           git diff --cached --quiet || git commit -m "chore: update data snapshots"
-          git push
+          git push origin HEAD
