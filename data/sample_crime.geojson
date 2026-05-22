@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "weight": 4, "category": "assault" },
+      "geometry": { "type": "Point", "coordinates": [-87.6284, 41.8851] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "weight": 2, "category": "theft" },
+      "geometry": { "type": "Point", "coordinates": [-87.6211, 41.8799] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "weight": 3, "category": "robbery" },
+      "geometry": { "type": "Point", "coordinates": [-87.6402, 41.8825] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "weight": 1, "category": "vehicle" },
+      "geometry": { "type": "Point", "coordinates": [-87.6125, 41.8742] }
+    }
+  ]
+}
