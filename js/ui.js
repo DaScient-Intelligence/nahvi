@@ -17,7 +17,9 @@ function setStatus(message, isError = false) {
   const el = document.querySelector('#status-message');
   if (!el) return;
   el.textContent = message;
-  el.style.color = isError ? '#b91c1c' : '#0f766e';
+  el.style.color = isError ? '#ff7a8a' : '#6dffd0';
+  el.style.borderColor = isError ? 'rgba(255, 122, 138, 0.25)' : 'rgba(109, 255, 208, 0.18)';
+  el.style.background = isError ? 'rgba(255, 122, 138, 0.06)' : 'rgba(109, 255, 208, 0.06)';
 }
 
 function setDataSource(layerType) {
